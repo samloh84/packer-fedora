@@ -1,0 +1,20 @@
+{
+  "_comment": "Run by executing packer -var-file=fedora-23-server.json fedora.json",
+  "iso_checksum": "32e0a15a1c71d0e2fd36a0af5b67a3b3af82976d2dfca0aefcb90d42f2ae6844",
+  "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/23/Server/x86_64/iso/Fedora-Server-netinst-x86_64-23.iso",
+  "iso_name": "Fedora-Server-netinst-x86_64-23.iso",
+  "iso_path": "iso",
+  "ssh_username": "vagrant",
+  "ssh_password": "vagrant",
+  "ssh_port": "22",
+  "ssh_timeout": "60m",
+  "disk_size": "204800",
+  "virtualbox_guest_os_type": "RedHat_64",
+  "vmware_guest_os_type": "fedora-64",
+  "vm_name": "fedora-23-server",
+  "memory": "2048",
+  "cpus": "2",
+  "shutdown_command": "shutdown -h now",
+  "kickstart": "anaconda-ks.cfg",
+  "headless": "false"
+}
