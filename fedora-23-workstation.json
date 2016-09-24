@@ -14,7 +14,7 @@
   "vm_name": "fedora-23-workstation",
   "memory": "2048",
   "cpus": "2",
-  "shutdown_command": "shutdown -h now",
+  "shutdown_command": "sudo shutdown -h now",
   "kickstart": "anaconda-ks.cfg",
   "headless": "false"
 }
