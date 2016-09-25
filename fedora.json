@@ -63,5 +63,15 @@
         "ethernet0.connectionType": "bridged"
       }
     }
-  ]
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "compression_level": "{{user `compression_level`}}",
+      "output": "{{ user `vm_name` }}.{{ build_type }}.box"
+    }
+  ],
+  "variables": {
+    "compression_level": "9"
+  }
 }
