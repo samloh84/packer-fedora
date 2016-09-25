@@ -67,6 +67,7 @@
   "post-processors": [
     {
       "type": "vagrant",
+      "keep_input_artifact": true,
       "compression_level": "{{user `compression_level`}}",
       "output": "{{ user `vm_name` }}.{{ build_type }}.box"
     }
