@@ -69,10 +69,23 @@
       "type": "vagrant",
       "keep_input_artifact": true,
       "compression_level": "{{user `compression_level`}}",
-      "output": "{{ user `vm_name` }}.{{ build_type }}.box"
+      "output": "output/{{ user `vm_name` }}.{{ build_type }}.box"
     }
   ],
   "variables": {
-    "compression_level": "9"
+    "compression_level": "9",
+    "iso_path": "iso",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "ssh_port": "22",
+    "ssh_timeout": "60m",
+    "disk_size": "204800",
+    "virtualbox_guest_os_type": "RedHat_64",
+    "vmware_guest_os_type": "fedora-64",
+    "memory": "2048",
+    "cpus": "2",
+    "shutdown_command": "sudo shutdown -h now",
+    "kickstart": "anaconda-ks.cfg",
+    "headless": "false"
   }
 }

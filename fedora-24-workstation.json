@@ -3,18 +3,6 @@
   "iso_checksum": "1d0aaa3dadba90bbac211729c406072dd91f67c04315effb50fd8d9e0aa8f6c0",
   "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/24/Workstation/x86_64/iso/Fedora-Workstation-netinst-x86_64-24-1.2.iso",
   "iso_name": "Fedora-Workstation-netinst-x86_64-24-1.2.iso",
-  "iso_path": "iso",
-  "ssh_username": "vagrant",
-  "ssh_password": "vagrant",
-  "ssh_port": "22",
-  "ssh_timeout": "60m",
-  "disk_size": "204800",
-  "virtualbox_guest_os_type": "RedHat_64",
-  "vmware_guest_os_type": "fedora-64",
-  "vm_name": "fedora-24-workstation",
-  "memory": "2048",
-  "cpus": "2",
-  "shutdown_command": "sudo shutdown -h now",
-  "kickstart": "anaconda-ks.cfg",
-  "headless": "false"
+  "vm_name": "fedora-24-workstation"
+
 }
