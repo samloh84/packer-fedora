@@ -38,7 +38,8 @@
           "{{user `cpus`}}"
         ]
       ],
-      "format": "ova"
+      "format": "ova",
+      "guest_additions_mode": "disable"
     },
     {
       "type": "vmware-iso",

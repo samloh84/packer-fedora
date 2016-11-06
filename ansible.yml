@@ -1,0 +1,20 @@
+---
+- hosts: all
+  remote_user: vagrant
+  become: yes
+  roles:
+    - samloh84.nvm
+    - samloh84.oracle-java-jdk
+    - samloh84.php
+    - samloh84.python
+    - samloh84.rvm
+    - samloh84.docker
+    - { role: samloh84.jetbrains-ide, product: idea, product_version: 2016.2.4 }
+    - { role: samloh84.jetbrains-ide, product: clion, product_version: 2016.2.2 }
+    - { role: samloh84.jetbrains-ide, product: datagrip, product_version: 2016.2.3 }
+    - { role: samloh84.jetbrains-ide, product: pycharm, product_version: 2016.2.3 }
+    - { role: samloh84.jetbrains-ide, product: rubymine, product_version: 2016.2.3 }
+    - { role: samloh84.jetbrains-ide, product: phpstorm, product_version: 2016.2.1 }
+    - { role: samloh84.jetbrains-ide, product: webstorm, product_version: 2016.2.1 }
+
+
