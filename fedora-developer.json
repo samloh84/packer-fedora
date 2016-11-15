@@ -48,6 +48,6 @@
     "shutdown_command": "sudo shutdown -h now",
     "kickstart": "anaconda-ks.cfg",
     "headless": "false"
-  },
+  }
 
 }
