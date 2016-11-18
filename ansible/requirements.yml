@@ -1,0 +1,7 @@
+  - src: samloh84.docker
+  - src: samloh84.nvm
+  - src: samloh84.oracle-java-jdk
+  - src: samloh84.php
+  - src: samloh84.python
+  - src: samloh84.rvm
+  - src: samloh84.jetbrains-ide

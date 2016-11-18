@@ -1,0 +1,19 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+  become: yes
+  roles:
+    - samloh84.nvm
+    - samloh84.oracle-java-jdk
+    - samloh84.php
+    - { role: samloh84.python, python_version: 3.5.2 }
+    - { role: samloh84.python, python_version: 2.7.12 }
+    - samloh84.rvm
+    - samloh84.docker
+    - { role: samloh84.jetbrains-ide, product: idea, product_version: 2016.2.5 }
+    - { role: samloh84.jetbrains-ide, product: clion, product_version: 2016.2.3 }
+    - { role: samloh84.jetbrains-ide, product: datagrip, product_version: 2016.2.6 }
+    - { role: samloh84.jetbrains-ide, product: pycharm, product_version: 2016.2.3 }
+    - { role: samloh84.jetbrains-ide, product: rubymine, product_version: 2016.2.5 }
+    - { role: samloh84.jetbrains-ide, product: phpstorm, product_version: 2016.2.2 }
+    - { role: samloh84.jetbrains-ide, product: webstorm, product_version: '2016.3' }

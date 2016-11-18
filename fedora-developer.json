@@ -1,5 +1,5 @@
 {
-  "_comment": "Base template. Run by executing packer -var-file=<variable_file> fedora-developer.json",
+  "_comment": "Base template. Run by executing packer build -var-file=<variable_file> fedora-developer.json",
   "builders": [
     {
       "type": "virtualbox-ovf",
@@ -11,18 +11,37 @@
     },
     {
       "type": "vmware-vmx",
-      "source_path": "output/vmware-iso/{{ user `vm_name` }}",
+      "source_path": "output/vmware-iso/{{ user `vm_name` }}/{{ user `vm_name` }}.vmx",
       "ssh_username": "{{ user `ssh_username` }}",
       "ssh_password": "{{ user `ssh_password` }}",
       "output_directory": "output/{{ build_type }}/{{ user `vm_name` }}-developer",
-      "shutdown_command": "{{ user `shutdown_command` }}"
+      "shutdown_command": "{{ user `shutdown_command` }}",
+      "vmx_data": {
+        "ethernet0.connectionType": "nat"
+      },
+      "vmx_data_post": {
+        "ethernet0.connectionType": "bridged"
+      }
     }
   ],
   "provisioners": [
     {
-      "type": "ansible-local",
-      "playbook_file": "ansible.yml",
-      "galaxy_file": "requirements.yml"
+      "type": "file",
+      "source": "ansible/requirements.yml",
+      "destination": "/root/requirements.yml"
+    },
+    {
+      "type": "file",
+      "source": "ansible/ansible.yml",
+      "destination": "/root/ansible.yml"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "ansible-galaxy install -r /root/requirements.yml",
+        "ansible-playbook /root/ansible.yml"
+      ],
+      "remote_folder": "/root"
     }
   ],
   "post-processors": [
@@ -36,7 +55,7 @@
   "variables": {
     "compression_level": "9",
     "iso_path": "iso",
-    "ssh_username": "vagrant",
+    "ssh_username": "root",
     "ssh_password": "vagrant",
     "ssh_port": "22",
     "ssh_timeout": "60m",
@@ -45,9 +64,9 @@
     "vmware_guest_os_type": "fedora-64",
     "memory": "2048",
     "cpus": "2",
-    "shutdown_command": "sudo shutdown -h now",
+    "shutdown_command": "sudo /sbin/shutdown -P now",
     "kickstart": "anaconda-ks.cfg",
-    "headless": "false"
+    "headless": "false",
+    "graphics_enabled": "FALSE"
   }
-
 }
