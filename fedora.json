@@ -17,13 +17,13 @@
       "boot_command": "<tab> inst.ks=hd:fd0:/{{ user `kickstart` }} <enter><wait>",
       "disk_size": "{{ user `disk_size` }}",
       "floppy_files": [
-        "floppy/{{ user `vm_name` }}/{{ user `kickstart` }}"
+        "floppy/{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}/{{ user `kickstart` }}"
       ],
       "guest_os_type": "{{ user `virtualbox_guest_os_type` }}",
       "ssh_port": "{{ user `ssh_port` }}",
-      "output_directory": "output/{{ build_type }}/{{ user `vm_name` }}",
+      "output_directory": "output/{{ build_type }}/{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}",
       "shutdown_command": "{{ user `shutdown_command` }}",
-      "vm_name": "{{ user `vm_name` }}",
+      "vm_name": "{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}",
       "vboxmanage": [
         [
           "modifyvm",
@@ -57,13 +57,13 @@
       "disk_size": "{{ user `disk_size` }}",
       "disk_type_id": "0",
       "floppy_files": [
-        "floppy/{{ user `vm_name` }}/{{ user `kickstart` }}"
+        "floppy/{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}/{{ user `kickstart` }}"
       ],
       "guest_os_type": "{{ user `vmware_guest_os_type` }}",
-      "output_directory": "output/{{ build_type }}/{{ user `vm_name` }}",
+      "output_directory": "output/{{ build_type }}/{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}",
       "shutdown_command": "{{ user `shutdown_command` }}",
-      "vm_name": "{{ user `vm_name` }}",
-      "vmdk_name": "{{ user `vm_name` }}",
+      "vm_name": "{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}",
+      "vmdk_name": "{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}",
       "vmx_data": {
         "memsize": "{{ user `memory` }}",
         "numvcpus": "{{ user `cpus` }}",
@@ -79,7 +79,7 @@
       "type": "vagrant",
       "keep_input_artifact": true,
       "compression_level": "{{user `compression_level`}}",
-      "output": "output/{{ user `vm_name` }}.{{ build_type }}.box"
+      "output": "output/{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}.{{ build_type }}.box"
     }
   ],
   "variables": {

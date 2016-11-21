@@ -3,6 +3,8 @@
   "iso_checksum": "071c30520775b3e93bb4c34edab4eab3badc26fbb8473ad3a9458614ba85a4e5",
   "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/24/Server/x86_64/iso/Fedora-Server-netinst-x86_64-24-1.2.iso",
   "iso_name": "Fedora-Server-netinst-x86_64-24-1.2.iso",
-  "vm_name": "fedora-24-server"
+  "linux_distribution":"fedora",
+  "linux_distribution_version": "24",
+  "install_type": "server"
 
 }
