@@ -1,0 +1,10 @@
+{
+  "_comment": "Run by executing packer -var-file=fedora-25-workstation.json fedora.json",
+  "iso_checksum": "6a1e69416b0d72efd2962ce01bdad547074a32b70f7d70e2e6436d16398522a7",
+  "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/25/Workstation/x86_64/iso/Fedora-Workstation-netinst-x86_64-25-1.3.iso",
+  "iso_name": "Fedora-Workstation-netinst-x86_64-25-1.3.iso",
+  "linux_distribution":"fedora",
+  "linux_distribution_version": "25",
+  "install_type": "workstation",
+  "graphics_enabled": "TRUE"
+}

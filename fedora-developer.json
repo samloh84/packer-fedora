@@ -1,5 +1,5 @@
 {
-  "_comment": "Base template. Run by executing packer build -var-file=<variable_file> fedora-developer.json",
+  "_comment": "Base template. Run by executing packer build -var-file=<variable_file> centos-developer.json",
   "builders": [
     {
       "type": "virtualbox-iso",
@@ -14,7 +14,7 @@
       "ssh_username": "{{ user `ssh_username` }}",
       "ssh_password": "{{ user `ssh_password` }}",
       "ssh_timeout": "{{ user `ssh_timeout` }}",
-      "boot_command": "<tab> inst.ks=hd:fd0:/{{ user `kickstart` }} <enter><wait>",
+      "boot_command": "<tab> ks=hd:fd0:/{{ user `kickstart` }} <enter><wait>",
       "disk_size": "{{ user `disk_size` }}",
       "floppy_files": [
         "floppy/{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}/{{ user `kickstart` }}"
@@ -38,8 +38,7 @@
           "{{user `cpus`}}"
         ]
       ],
-      "format": "ova",
-      "guest_additions_mode": "disable"
+      "format": "ova"
     },
     {
       "type": "vmware-iso",
@@ -53,7 +52,7 @@
       "ssh_username": "{{ user `ssh_username` }}",
       "ssh_password": "{{ user `ssh_password` }}",
       "ssh_timeout": "{{ user `ssh_timeout` }}",
-      "boot_command": "<tab> inst.ks=hd:fd0:/{{ user `kickstart` }} <enter><wait>",
+      "boot_command": "<tab> text ks=hd:fd0:/{{ user `kickstart` }} <enter><wait>",
       "disk_size": "{{ user `disk_size` }}",
       "disk_type_id": "0",
       "floppy_files": [
@@ -71,7 +70,8 @@
       },
       "vmx_data_post": {
         "ethernet0.connectionType": "bridged"
-      }
+      },
+      "tools_upload_flavor": ""
     }
   ],
   "provisioners": [
@@ -99,7 +99,7 @@
       "type": "vagrant",
       "keep_input_artifact": true,
       "compression_level": "{{user `compression_level`}}",
-      "output": "output/{{ user `vm_name` }}.{{ build_type }}.box"
+      "output": "output/{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-developer-{{ user `install_type` }}.{{ build_type }}.box"
     }
   ],
   "variables": {
