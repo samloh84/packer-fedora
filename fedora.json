@@ -21,7 +21,7 @@
       ],
       "guest_os_type": "{{ user `virtualbox_guest_os_type` }}",
       "ssh_port": "{{ user `ssh_port` }}",
-      "output_directory": "output/{{ build_type }}/{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}",
+      "output_directory": "output/{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}-{{ build_type }}",
       "shutdown_command": "{{ user `shutdown_command` }}",
       "vm_name": "{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}",
       "vboxmanage": [
@@ -60,7 +60,7 @@
         "floppy/{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}/{{ user `kickstart` }}"
       ],
       "guest_os_type": "{{ user `vmware_guest_os_type` }}",
-      "output_directory": "output/{{ build_type }}/{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}",
+      "output_directory": "output/{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}-{{ build_type }}",
       "shutdown_command": "{{ user `shutdown_command` }}",
       "vm_name": "{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}",
       "vmdk_name": "{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}",
@@ -71,7 +71,8 @@
       },
       "vmx_data_post": {
         "ethernet0.connectionType": "bridged"
-      }
+      },
+      "tools_upload_flavor": ""
     }
   ],
   "post-processors": [
@@ -79,7 +80,7 @@
       "type": "vagrant",
       "keep_input_artifact": true,
       "compression_level": "{{user `compression_level`}}",
-      "output": "output/{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}.{{ build_type }}.box"
+      "output": "output/{{ user `linux_distribution` }}-{{ user `linux_distribution_version` }}-{{ user `install_type` }}-{{ build_type }}.box"
     }
   ],
   "variables": {

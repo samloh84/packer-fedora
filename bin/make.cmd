@@ -1,9 +1,13 @@
 @echo off
+SETLOCAL EnableDelayedExpansion
 
 REM To force build, add -force to arguments
 REM To build for only one builder, add -only=virtualbox-iso or -only=vmware-iso
 
 SET NO_OPTS=1
+SET FEDORA_26_SERVER=0
+SET FEDORA_26_WORKSTATION=0
+SET FEDORA_26_DEVELOPER_WORKSTATION=0
 SET FEDORA_25_SERVER=0
 SET FEDORA_25_WORKSTATION=0
 SET FEDORA_25_DEVELOPER_WORKSTATION=0
@@ -26,6 +30,9 @@ ECHO "%~1"
 
 SET OPTS_MATCHED=0
 IF /I "%~1" == "all" (
+	SET FEDORA_26_SERVER=1
+	SET FEDORA_26_WORKSTATION=1
+	SET FEDORA_26_DEVELOPER_WORKSTATION=1
 	SET FEDORA_25_SERVER=1
 	SET FEDORA_25_WORKSTATION=1
 	SET FEDORA_25_DEVELOPER_WORKSTATION=1
@@ -35,6 +42,13 @@ IF /I "%~1" == "all" (
 	SET FEDORA_23_SERVER=1
 	SET FEDORA_23_WORKSTATION=1
 	SET FEDORA_23_DEVELOPER_WORKSTATION=1
+	SET OPTS_MATCHED=1
+)
+
+IF /I "%~1" == "fedora-26" (
+	SET FEDORA_26_SERVER=1
+	SET FEDORA_26_WORKSTATION=1
+	SET FEDORA_26_DEVELOPER_WORKSTATION=1
 	SET OPTS_MATCHED=1
 )
 
@@ -56,6 +70,21 @@ IF /I "%~1" == "fedora-23" (
 	SET FEDORA_23_SERVER=1
 	SET FEDORA_23_WORKSTATION=1
 	SET FEDORA_23_DEVELOPER_WORKSTATION=1
+	SET OPTS_MATCHED=1
+)
+
+IF /I "%~1" == "fedora-26-server" (
+	SET FEDORA_26_SERVER=1
+	SET OPTS_MATCHED=1
+)
+
+IF /I "%~1" == "fedora-26-workstation" (
+	SET FEDORA_26_WORKSTATION=1
+	SET OPTS_MATCHED=1
+)
+
+IF /I "%~1" == "fedora-26-developer-workstation" (
+	SET FEDORA_26_DEVELOPER_WORKSTATION=1
 	SET OPTS_MATCHED=1
 )
 
@@ -127,6 +156,9 @@ IF %OPTS_MATCHED% EQU 1 (
 IF /I NOT "%~1" == "" GOTO GETOPTS
 
 IF %NO_OPTS% EQU 1 (
+	SET FEDORA_26_SERVER=1
+    SET FEDORA_26_WORKSTATION=1
+    SET FEDORA_26_DEVELOPER_WORKSTATION=1
 	SET FEDORA_25_SERVER=1
     SET FEDORA_25_WORKSTATION=1
     SET FEDORA_25_DEVELOPER_WORKSTATION=1
@@ -150,6 +182,10 @@ IF %ONLY_VIRTUALBOX_ISO% EQU 1 (
 echo NO_OPTS=%NO_OPTS%
 echo REST_ARGS=%BUILDER_ARGS% %ON_ERROR_ARGS% 
 
+echo FEDORA_26_SERVER=%FEDORA_26_SERVER%
+echo FEDORA_26_WORKSTATION=%FEDORA_26_WORKSTATION%
+echo FEDORA_26_DEVELOPER_WORKSTATION=%FEDORA_26_DEVELOPER_WORKSTATION%
+
 echo FEDORA_25_SERVER=%FEDORA_25_SERVER%
 echo FEDORA_25_WORKSTATION=%FEDORA_25_WORKSTATION%
 echo FEDORA_25_DEVELOPER_WORKSTATION=%FEDORA_25_DEVELOPER_WORKSTATION%
@@ -162,46 +198,84 @@ echo FEDORA_23_SERVER=%FEDORA_23_SERVER%
 echo FEDORA_23_WORKSTATION=%FEDORA_23_WORKSTATION%
 echo FEDORA_23_DEVELOPER_WORKSTATION=%FEDORA_23_DEVELOPER_WORKSTATION%
 
+SET LINUX_DISTRIBUTION=fedora
+SET BUILD_TYPE=vmware-iso
+
 pushd ..
+
+IF %FEDORA_26_SERVER% EQU 1 (
+    SET LINUX_DISTRIBUTION_VERSION=26
+    SET INSTALL_TYPE=server
+	packer.exe build -force -var-file=%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
+	ovftool.exe --overwrite output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!-%BUILD_TYPE%\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.vmx output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.ova
+)
+IF %FEDORA_26_WORKSTATION% EQU 1 (
+    SET LINUX_DISTRIBUTION_VERSION=26
+    SET INSTALL_TYPE=workstation
+	packer.exe build -force -var-file=%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
+	ovftool.exe --overwrite output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!-%BUILD_TYPE%\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.vmx output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.ova
+)
+IF %FEDORA_26_DEVELOPER_WORKSTATION% EQU 1 (
+    SET LINUX_DISTRIBUTION_VERSION=26
+    SET INSTALL_TYPE=workstation
+    packer.exe build -force -var-file=%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
+    ovftool.exe --overwrite output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!-%BUILD_TYPE%\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!.vmx output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!.ova
+)
+
 IF %FEDORA_25_SERVER% EQU 1 (
-	packer.exe build -force -var-file=fedora-25-server.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
-	ovftool.exe --overwrite output\vmware-iso\fedora-25-server\fedora-25-server.vmx output\fedora-25-server.ova
+    SET LINUX_DISTRIBUTION_VERSION=25
+    SET INSTALL_TYPE=server
+	packer.exe build -force -var-file=%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
+	ovftool.exe --overwrite output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!-%BUILD_TYPE%\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.vmx output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.ova
 )
 IF %FEDORA_25_WORKSTATION% EQU 1 (
-	packer.exe build -force -var-file=fedora-25-workstation.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
-	ovftool.exe --overwrite output\vmware-iso\fedora-25-workstation\fedora-25-workstation.vmx output\fedora-25-workstation.ova
+    SET LINUX_DISTRIBUTION_VERSION=25
+    SET INSTALL_TYPE=workstation
+	packer.exe build -force -var-file=%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
+	ovftool.exe --overwrite output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!-%BUILD_TYPE%\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.vmx output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.ova
 )
 IF %FEDORA_25_DEVELOPER_WORKSTATION% EQU 1 (
-	packer.exe build -force -var-file=fedora-25-workstation.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora-developer.json
-	ovftool.exe --overwrite output\vmware-iso\fedora-25-developer-workstation\fedora-25-developer-workstation.vmx output\fedora-25-developer-workstation.ova
+    SET LINUX_DISTRIBUTION_VERSION=25
+    SET INSTALL_TYPE=workstation
+    packer.exe build -force -var-file=%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
+    ovftool.exe --overwrite output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!-%BUILD_TYPE%\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!.vmx output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!.ova
 )
 
 IF %FEDORA_24_SERVER% EQU 1 (
-	packer.exe build -force -var-file=fedora-24-server.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
-
-	ovftool.exe --overwrite output\vmware-iso\fedora-24-server\fedora-24-server.vmx output\fedora-24-server.ova
+    SET LINUX_DISTRIBUTION_VERSION=24
+    SET INSTALL_TYPE=server
+	packer.exe build -force -var-file=%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
+	ovftool.exe --overwrite output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!-%BUILD_TYPE%\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.vmx output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.ova
 )
 IF %FEDORA_24_WORKSTATION% EQU 1 (
-	packer.exe build -force -var-file=fedora-24-workstation.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
-	ovftool.exe --overwrite output\vmware-iso\fedora-24-workstation\fedora-24-workstation.vmx output\fedora-24-workstation.ova
+    SET LINUX_DISTRIBUTION_VERSION=24
+    SET INSTALL_TYPE=workstation
+	packer.exe build -force -var-file=%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
+	ovftool.exe --overwrite output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!-%BUILD_TYPE%\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.vmx output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.ova
 )
 IF %FEDORA_24_DEVELOPER_WORKSTATION% EQU 1 (
-	packer.exe build -force -var-file=fedora-24-workstation.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora-developer.json
-	ovftool.exe --overwrite output\vmware-iso\fedora-24-developer-workstation\fedora-24-developer-workstation.vmx output\fedora-24-developer-workstation.ova
+    SET LINUX_DISTRIBUTION_VERSION=24
+    SET INSTALL_TYPE=workstation
+    packer.exe build -force -var-file=%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
+    ovftool.exe --overwrite output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!-%BUILD_TYPE%\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!.vmx output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!.ova
 )
-
 IF %FEDORA_23_SERVER% EQU 1 (
-	packer.exe build -force -var-file=fedora-23-server.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
-	ovftool.exe --overwrite output\vmware-iso\fedora-23-server\fedora-23-server.vmx output\fedora-23-server.ova
+    SET LINUX_DISTRIBUTION_VERSION=23
+    SET INSTALL_TYPE=server
+	packer.exe build -force -var-file=%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
+	ovftool.exe --overwrite output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!-%BUILD_TYPE%\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.vmx output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.ova
 )
 IF %FEDORA_23_WORKSTATION% EQU 1 (
-	packer.exe build -force -var-file=fedora-23-workstation.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
-	ovftool.exe --overwrite output\vmware-iso\fedora-23-workstation\fedora-23-workstation.vmx output\fedora-23-workstation.ova
+    SET LINUX_DISTRIBUTION_VERSION=23
+    SET INSTALL_TYPE=workstation
+	packer.exe build -force -var-file=%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
+	ovftool.exe --overwrite output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!-%BUILD_TYPE%\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.vmx output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-!INSTALL_TYPE!.ova
 )
 IF %FEDORA_23_DEVELOPER_WORKSTATION% EQU 1 (
-	packer.exe build -force -var-file=fedora-23-workstation.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora-developer.json
-	ovftool.exe --overwrite output\vmware-iso\fedora-23-developer-workstation\fedora-23-developer-workstation.vmx output\fedora-23-developer-workstation.ova
+    SET LINUX_DISTRIBUTION_VERSION=23
+    SET INSTALL_TYPE=workstation
+    packer.exe build -force -var-file=%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!.json %BUILDER_ARGS% %ON_ERROR_ARGS% fedora.json
+    ovftool.exe --overwrite output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!-%BUILD_TYPE%\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!.vmx output\%LINUX_DISTRIBUTION%-!LINUX_DISTRIBUTION_VERSION!-developer-!INSTALL_TYPE!.ova
 )
-
 
 popd
