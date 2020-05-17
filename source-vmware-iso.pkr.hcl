@@ -30,6 +30,6 @@ source "vmware-iso" "fedora" {
 
   cpus = var.cpus
   memory = var.memory
-  cores = var.cores
+  cores = var.vmware_cores
 
 }
