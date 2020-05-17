@@ -136,7 +136,7 @@ variable "vmware_cores" {
 
 variable "ssh_timeout" {
   type = string
-  default = "30m"
+  default = "1h"
 }
 
 variable "virtualbox_format" {
