@@ -1,9 +1,0 @@
-{
-  "_comment": "Run by executing packer -var-file=fedora-23-server.json fedora.json",
-  "iso_checksum": "32e0a15a1c71d0e2fd36a0af5b67a3b3af82976d2dfca0aefcb90d42f2ae6844",
-  "iso_url": "https://download.fedoraproject.org/pub/fedora/linux/releases/23/Server/x86_64/iso/Fedora-Server-netinst-x86_64-23.iso",
-  "iso_name": "Fedora-Server-netinst-x86_64-23.iso",
-  "linux_distribution":"fedora",
-  "linux_distribution_version": "23",
-  "install_type": "server"
-}
