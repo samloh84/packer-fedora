@@ -5,10 +5,10 @@ build {
 
 
 
-//  provisioner "shell" {
-//    scripts = []
-//    environment_vars = [
-//    ]
-//  }
+
+  provisioner "shell" {
+    scripts = local.shell_scripts
+    environment_vars = local.shell_environment_vars
+  }
 
 }

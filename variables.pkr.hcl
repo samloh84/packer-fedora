@@ -12,6 +12,7 @@ variable "iso_folder" {
   type = string
   default = "iso"
 }
+
 variable "http_folder" {
   type = string
   default = "http"
@@ -44,7 +45,6 @@ variable "vmware_guest_os_type" {
   default = "fedora-64"
 }
 
-
 variable "virtualbox_guest_os_type" {
   type = string
   default = "Fedora_64"
@@ -66,7 +66,6 @@ variable "distribution" {
   default = "fedora"
 }
 
-
 variable "distribution_major_version" {
   type = string
 }
@@ -74,7 +73,6 @@ variable "distribution_major_version" {
 variable "distribution_variant" {
   type = string
 }
-
 
 variable "http_directory" {
   type = string
@@ -100,7 +98,6 @@ variable "ssh_port" {
   type = number
   default = 22
 }
-
 
 variable "boot_command" {
   type = list(string)
@@ -144,6 +141,17 @@ variable "virtualbox_format" {
   default = "ova"
 }
 
+variable "shell_scripts" {
+  type = list(string)
+  default = []
+}
+
+variable "shell_environment_vars" {
+  type = list(string)
+  default = []
+}
+
+
 locals {
   vm_name = join("-", [for name_component in [
     var.distribution,
@@ -152,5 +160,13 @@ locals {
   iso_path = coalesce(var.iso_path, "${var.working_folder}/${var.iso_folder}/${var.iso_filename}")
   http_directory = coalesce(var.http_directory, "./${var.http_folder}/${local.vm_name}")
   output_directory = coalesce(var.output_directory, "${var.working_folder}/${var.output_folder}/{{ build_type }}/${local.vm_name}")
+  shell_scripts = concat(var.shell_scripts, [
+    "scripts/cleanup.sh"])
+  shell_environment_vars = concat(var.shell_environment_vars, [
+    "DISTRIBUTION=${var.distribution}",
+    "DISTRIBUTION_MAJOR_VERSION=${var.distribution_major_version}",
+    "DISTRIBUTION_VARIANT=${var.distribution_variant}",
+    "SSH_USERNAME=${var.ssh_username}",
+    "SSH_PASSWORD=${var.ssh_password}",
+  ])
 }
-
