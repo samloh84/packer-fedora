@@ -8,7 +8,7 @@ source "virtualbox-iso" "fedora" {
 
   disk_size = var.disk_size
 
-  http_directory = local.http_directory
+  http_directory = local.kickstart_directory
 
   vm_name = local.vm_name
   guest_os_type = var.virtualbox_guest_os_type
